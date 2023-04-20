@@ -8,6 +8,9 @@
 #include "Components/InputComponent.h"
 #include "GameFramework/InputSettings.h"
 
+#include "Items/Item.h"
+#include "Items/Shovel.h"
+#include "Components/BoxComponent.h"
 
 //////////////////////////////////////////////////////////////////////////
 // AGrobbingGameCharacter
@@ -72,6 +75,16 @@ void AGrobbingGameCharacter::SetupPlayerInputComponent(class UInputComponent* Pl
 	PlayerInputComponent->BindAxis("Look Up / Down Mouse", this, &APawn::AddControllerPitchInput);
 	PlayerInputComponent->BindAxis("Turn Right / Left Gamepad", this, &AGrobbingGameCharacter::TurnAtRate);
 	PlayerInputComponent->BindAxis("Look Up / Down Gamepad", this, &AGrobbingGameCharacter::LookUpAtRate);
+
+	PlayerInputComponent->BindAction(FName("PickUp"), IE_Pressed, this, &AGrobbingGameCharacter::EKeyPressed);
+}
+
+void AGrobbingGameCharacter::SetShovelCollisionEnabled(ECollisionEnabled::Type CollisionEnabled)
+{
+	if (EquippedShovel && EquippedShovel->GetShovelBox())
+	{
+		EquippedShovel->GetShovelBox()->SetCollisionEnabled(CollisionEnabled);
+	}
 }
 
 void AGrobbingGameCharacter::OnPrimaryAction()
@@ -133,6 +146,15 @@ void AGrobbingGameCharacter::LookUpAtRate(float Rate)
 {
 	// calculate delta for this frame from the rate information
 	AddControllerPitchInput(Rate * TurnRateGamepad * GetWorld()->GetDeltaSeconds());
+}
+
+void AGrobbingGameCharacter::EKeyPressed()
+{
+	AShovel* OverlappingShovel = Cast<AShovel>(OverlappingItem);
+	if (OverlappingShovel)
+	{
+		OverlappingShovel->PickUp(GetMesh(), FName("RightHandSocket"));
+	}
 }
 
 bool AGrobbingGameCharacter::EnableTouchscreenMovement(class UInputComponent* PlayerInputComponent)
