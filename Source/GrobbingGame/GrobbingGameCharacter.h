@@ -13,6 +13,9 @@ class UCameraComponent;
 class UAnimMontage;
 class USoundBase;
 
+class AItem;
+class AShovel;
+
 // Declaration of the delegate that will be called when the Primary Action is triggered
 // It is declared as dynamic so it can be accessed also in Blueprints
 DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnUseItem);
@@ -32,6 +35,10 @@ class AGrobbingGameCharacter : public ACharacter
 
 public:
 	AGrobbingGameCharacter();
+
+	UFUNCTION(BlueprintCallable)
+	void SetShovelCollisionEnabled(ECollisionEnabled::Type CollisionEnabled);
+
 
 protected:
 	virtual void BeginPlay();
@@ -67,6 +74,8 @@ protected:
 	 */
 	void LookUpAtRate(float Rate);
 
+	void EKeyPressed();
+
 	struct TouchData
 	{
 		TouchData() { bIsPressed = false;Location=FVector::ZeroVector;}
@@ -99,5 +108,15 @@ public:
 	/** Returns FirstPersonCameraComponent subobject **/
 	UCameraComponent* GetFirstPersonCameraComponent() const { return FirstPersonCameraComponent; }
 
+
+private:
+	UPROPERTY(VisibleInstanceOnly)
+	AItem* OverlappingItem;
+
+	UPROPERTY(VisibleAnywhere, Category = Shovel)
+		AShovel* EquippedShovel;
+
+public:
+	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
 };
 
