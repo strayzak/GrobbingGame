@@ -46,6 +46,9 @@ protected:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
         UStaticMeshComponent* ItemMesh;
 
+    UPROPERTY(EditAnywhere)
+    class UNiagaraComponent* ParticlesEffect;
+
 private:
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
         float RunningTime;

@@ -4,6 +4,7 @@
 #include "Items/Item.h"
 #include "Components/SphereComponent.h"
 #include "GrobbingGame/GrobbingGameCharacter.h"
+#include "NiagaraComponent.h"
 
 // Sets default values
 AItem::AItem()
@@ -16,6 +17,9 @@ AItem::AItem()
 
     Sphere = CreateDefaultSubobject<USphereComponent>(TEXT("Sphere"));
     Sphere->SetupAttachment(GetRootComponent());
+
+    ParticlesEffect = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Particles"));
+    ParticlesEffect->SetupAttachment(GetRootComponent());
 }
 
 // Called when the game starts or when spawned
